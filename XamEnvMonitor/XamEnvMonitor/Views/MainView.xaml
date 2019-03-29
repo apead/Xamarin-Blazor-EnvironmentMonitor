@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             x:Class="XamEnvMonitor.MainView">
+
+    <ContentPage.BackgroundImage>
+        <OnPlatform x:TypeArguments="system:String">
+            <On Platform="GTK" Value="Images/igniteback.png"/>
+            <On Platform="Android" Value="igniteback.png"/>
+            <On Platform="iOS" Value="igniteback.png"/>
+            <On Platform="Tizen" Value="igniteback.png"/>
+
+        </OnPlatform>
+    </ContentPage.BackgroundImage>
+
+    <StackLayout Orientation="Horizontal">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="3*" />
+             
+            </Grid.RowDefinitions>
+            <Label Margin="20,20,0,0" Grid.Row="0" Text="{Binding City}" FontAttributes="Bold" VerticalOptions="Start" Grid.ColumnSpan="2" HorizontalTextAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="0" Text="Min Temp" Style="{StaticResource GridHeadingStyle}"/>
+            <Label Grid.Row="2" Grid.Column="0" Text="Max Temp" Style="{StaticResource GridHeadingStyle}"/>
+            <Label Grid.Row="3" Grid.Column="0" Text="Humidity" Style="{StaticResource GridHeadingStyle}"/>
+            <Label Grid.Row="4" Grid.Column="0" Text="Pressure" Style="{StaticResource GridHeadingStyle}"/>
+            <Label Grid.Row="5" Grid.Column="0" Text="Wind Speed" Style="{StaticResource GridHeadingStyle}"/>
+
+            <Label Grid.Row="1" Grid.Column="1" Text="{Binding TempMin}" Style="{StaticResource GridTextStyle}"/>
+            <Label Grid.Row="2" Grid.Column="1" Text="{Binding TempMax}" Style="{StaticResource GridTextStyle}"/>
+            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Humidity}" Style="{StaticResource GridTextStyle}"/>
+            <Label Grid.Row="4" Grid.Column="1" Text="{Binding Pressure}" Style="{StaticResource GridTextStyle}"/>
+            <Label Grid.Row="5" Grid.Column="1" Text="{Binding WindSpeed}" Style="{StaticResource GridTextStyle}"/>
+            <Image VerticalOptions="Center" Grid.Row="6" Grid.Column="0" Source="{Binding IconUrl}" HeightRequest="100" Aspect="AspectFit" Grid.ColumnSpan="2"/>
+        </Grid>
+        <Label Margin="0,-90,0,0" Opacity="10" Text="{Binding Temperature}" FontSize="50" FontAttributes="Bold"  VerticalOptions="Center" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"/>
+    </StackLayout>
+</ContentPage>

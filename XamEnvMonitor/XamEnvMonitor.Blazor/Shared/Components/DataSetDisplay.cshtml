@@ -1,0 +1,52 @@
+﻿@using XamEnvMonitor.Blazor.Shared.Extensions
+@functions {
+
+    private string _initialData = null;
+
+    ElementRef datasetsTextArea;
+
+    [Parameter]
+    int Width { get; set; } = 600;
+
+    [Parameter]
+    int Height { get; set; } = 600;
+
+    [Parameter]
+    int Cols { get; set; } = 0;
+
+    [Parameter]
+    int Rows { get; set; } = 25;
+
+    async void OnKeyUp(UIEventArgs args)
+    {
+        var datasetsTextAreaVal = await datasetsTextArea.GetValue().ConfigureAwait(false);
+        OnUpdatedDataSetsStr?.Invoke(datasetsTextAreaVal);
+    }
+
+    private string _dataSetsStr;
+
+    [Parameter]
+    string DataSetsStr
+    {
+        get => _dataSetsStr;
+        set
+        {
+            _initialData = _initialData ?? value;
+
+            _dataSetsStr = value;
+            OnUpdatedDataSetsStr?.Invoke(_dataSetsStr); // unfortunately this changes on when the text area looses focus; bind-value-onchange isn't working right now
+        }
+    }
+
+    [Parameter]
+    Action<string> DataSetsStrChanged { get; set; }
+
+    //[Parameter]
+    public Action<string> OnUpdatedDataSetsStr { get; set; }
+
+    private void RestoreInitialData()
+    {
+        DataSetsStr = _initialData;
+    }
+
+}

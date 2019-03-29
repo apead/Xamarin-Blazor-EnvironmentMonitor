@@ -1,0 +1,112 @@
+﻿@page "/"
+@using ChartJs.Blazor.ChartJS.BarChart
+@using ChartJs.Blazor.ChartJS.BarChart.Dataset
+@using ChartJs.Blazor.ChartJS.MixedChart
+@using ChartJs.Blazor.Charts
+@using ChartJs.Blazor.Util.Color
+@using Newtonsoft.Json
+@using OpenWeather.Models
+@using OpenWeather.Models.Weather
+@using OpenWeather.Services
+@using XamEnvMonitor.Blazor.Helpers
+
+
+
+@if (weatherData == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Weather Conditions for @City</h3>
+   
+
+    <div class="grid-container">
+        <div class="grid-heading">Temp Min</div>
+        <div class="grid-heading">Temp Max</div>
+        <div class="grid-heading">Wind Speed</div>  
+        <div class="grid-heading">Pressure</div>
+        <div class="grid-heading">Humidity</div>
+        <div class="grid-heading">Temperature</div>  
+        <div class="grid-item">@TempMin</div>
+        <div class="grid-item">@TempMax</div>
+        <div class="grid-item">@WindSpeed</div>  
+        <div class="grid-item">@Pressure</div>  
+        <div class="grid-item">@Humidity</div>  
+        <div class="grid-item">@Temperature</div>  
+    </div>
+    
+    <ChartJsMixedChart ref="chart" Config="@mixedChartConfig" Width="600" Height="200"/>
+
+    <DataSetDisplay ref="_dataSetDisplay" bind-DataSetsStr="@DataSetsStr" Width="600" Height="200" />
+
+ 
+    <div>
+        <button class="btn btn-primary" onclick="@RefreshChart">Refresh</button>
+    </div>
+}
+
+@functions {
+
+    private MixedChartConfig mixedChartConfig { get; set; }
+    private ChartJsMixedChart chart { get; set; }
+
+    public DataSetDisplay _dataSetDisplay;
+
+    WeatherData weatherData;
+    public string City { get; set; }
+    public string TempMin { get; set; }
+    public string TempMax { get; set; }
+    public string WindSpeed { get; set; }
+    public string Pressure { get; set; }
+    public string Humidity { get; set; }
+    public string Temperature { get; set; }
+
+
+    string DataSetsStr
+    {
+        get => JsonConvert.SerializeObject(mixedChartConfig.Data.Datasets, Formatting.Indented);
+        set
+        {
+            mixedChartConfig.Data.Datasets = JsonConvert.DeserializeObject<List<IMixableDataset>>(value);
+            Console.WriteLine(JsonConvert.SerializeObject(mixedChartConfig.Data.Datasets));
+        }
+    }
+
+    protected override async Task OnInitAsync()
+    {
+        var weather = new OpenWeatherService();
+
+        weatherData = await weather.GetWeatherAsync("Cape Town");
+
+        City = weatherData.Title;
+        TempMin = weatherData.Main.TempMin + "°C";
+        TempMax = weatherData.Main.TempMax + "°C";
+        WindSpeed = weatherData.Wind.Speed + " m/s";
+        Pressure = weatherData.Main.Pressure + " hPa";
+        Humidity = weatherData.Main.Humidity + "%";
+        Temperature = weatherData.Main.Temperature + "°C";
+
+
+        mixedChartConfig = await WeatherHelper.GetMixedChartConfig();
+    }
+
+    protected override void OnAfterRender()
+    {
+        Console.WriteLine("OnAfterRender - bar");
+        chart.Reload();
+
+        _dataSetDisplay.OnUpdatedDataSetsStr += (dataSetsStr) =>
+        {
+            mixedChartConfig.Data.Datasets = JsonConvert.DeserializeObject<List<IMixableDataset>>(dataSetsStr);
+            chart.Reload();
+        };
+    }
+
+    private async Task RefreshChart()
+    {
+        mixedChartConfig = await WeatherHelper.GetMixedChartConfig();
+        chart.Reload();
+    }
+
+}

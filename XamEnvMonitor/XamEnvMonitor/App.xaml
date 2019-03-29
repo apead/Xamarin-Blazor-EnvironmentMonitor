@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XamEnvMonitor.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Style x:Key="MainTitleTextStyle" TargetType="Label">
+<!--                <Setter Property="Margin" Value="0,20,0,0" /> -->
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+            <Style x:Key="GridHeadingStyle" TargetType="Label">
+                <Setter Property="Margin" Value="50,0,0,0" />
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+            <Style x:Key="GridTextStyle" TargetType="Label">
+                <Setter Property="Margin" Value="50,0,0,0" />
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="FontAttributes" Value="None" />
+            </Style>
+
+        </ResourceDictionary>
+   </Application.Resources>
+</Application>
